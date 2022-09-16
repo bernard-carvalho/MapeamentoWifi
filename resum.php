@@ -9,7 +9,7 @@ if (mysqli_connect_errno()) {
 $query="";
 
 $dataInicio="2022-09-13 00:00";
-$dataFim="2022-09-14 12:00";
+$dataFim="2022-09-14 00:00";
 $ipPesquisa="172.16.2.160";
 $intervaloMaximo=30;
 
@@ -38,7 +38,8 @@ if ($result = $mysqli -> query($query)) {
 	//	var_dump($row);
 	//	$ap_nome=$row["ap_nome"];
 		$data=$row["date"];
-		$ap_ip=$row["ap_nome"];
+		$ap_ip=$row["ap_ip"];
+		$ap_nome=$row["ap_nome"];
 
 
 		$data_hora_minuto=substr($data,11,5);
@@ -56,7 +57,7 @@ if ($result = $mysqli -> query($query)) {
 			>=$intervaloMaximo || $i==$result->num_rows
 		)
 		{
-			echo "[ ## CAMINHO ] detectado novo caminho"."\n";
+			//echo "[ ## CAMINHO ] detectado novo caminho"."\n";
 			//	echo $data_antiga."-".$data_hora_minuto."\n";
 			$caminho.="]";
 			//if($qntd_caminhos>0)
@@ -71,19 +72,19 @@ if ($result = $mysqli -> query($query)) {
 //			(substr($data_minuto,3,1)==substr($data_antiga,3,1)))
 //		)
 //			echo "detectado um salto na data".$data_antiga." para ".$data_minuto."\n";
-		echo $ap_ip_antigo."::".$ap_ip."\n";
+		//echo $ap_ip_antigo."::".$ap_ip."\n";
 
 		if(	$ap_ip_antigo	!=	$ap_ip	){
-			echo "[ # SALTO ] registrando novo salto\n";
+			//echo "[ # SALTO ] registrando novo salto\n";
 			if($qntd_saltos>0)
 				$salto=", ";
 			else
 				$salto="";
-			$salto.="{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\"}";
+			$salto.="{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}";
 	
 
 			$caminho.=$salto;
-			echo "caminho ".$qntd_caminhos.":".$caminho."\n";
+			//echo "caminho ".$qntd_caminhos.":".$caminho."\n";
 
 			$qntd_saltos++;
 			$ap_ip_antigo=$ap_ip;
@@ -93,17 +94,17 @@ if ($result = $mysqli -> query($query)) {
 
 		if($i==($result->num_rows-1))
 		{
-			echo "registrando ultimo caminho\n";
+			//echo "registrando ultimo caminho\n";
 			$caminho.="]";
 			$caminhos.=$caminho;
 
-			echo "registrando ultima conexao\n";
-			$caminhos.=", \"".++$qntd_caminhos."\":[{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\"}]";
+			//echo "registrando ultima conexao\n";
+			$caminhos.=", \"last_seen\":[{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}]";
 		}
 	}
 	$caminhos.="}";
 
-	echo "caminhos:\n".$caminhos."\n";
+	echo $caminhos."\n";
 
   $result -> free_result();
 }
