@@ -1,0 +1,23 @@
+<config>
+    <controladoras>
+    <!-- Exemplo de entrada para controladora
+    #       <controladora>
+                <ip>192.168.5.255</ip>
+                <nome>Controladora</nome>
+                <snmp_community>public</snmp_community>
+                <snmp_password></snmp_password>
+    #       </controladora>
+    !-->
+    </controladoras>
+    <acess_points>
+    <!-- Exemplo de entrada para controladora
+    #       <ponto_de_acesso>
+                <ip>192.168.5.255</ip>
+                <nome>Ponto de acesso</nome>
+                <snmp_community>public</snmp_community>
+                <snmp_password></snmp_password>
+    #       </ponto_de_acesso>
+    !-->
+    </acess_points>
+
+</config>
