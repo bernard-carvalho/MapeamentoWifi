@@ -8,10 +8,13 @@ if (mysqli_connect_errno()) {
 
 $query="";
 
-$dataInicio="2022-09-13 00:00";
-$dataFim="2022-09-14 00:00";
-$ipPesquisa="172.16.2.160";
-$intervaloMaximo=30;
+$dataInicio=$_GET["inicio"];
+//"2022-09-13 00:00";
+$dataFim=$_GET["fim"];
+//"2022-09-14 00:00";
+$ipPesquisa=$_GET["ip"];
+//"172.16.2.160";
+$intervaloMaximo=intval($_GET["intervalo"]);
 
 $query="select ap_ip, ip_sta, ap_nome, date from (select * from (select * from MAC_STA inner join AP on MAC_STA.mac_ap=AP.ap_mac where date>=\"".$dataInicio."\" and date<=\"".$dataFim."\")aa where ip_sta=\"".$ipPesquisa."\" order by mac_ap, date)bb order by date;";
 
@@ -50,7 +53,7 @@ if ($result = $mysqli -> query($query)) {
 		$unidadeMinutoAntigo=intval(substr($data_antiga,3,2))+
 		intval(substr($data_antiga,0,2))*60;
 		//SE O INTERVALO FOR SUPERIOR A X MINUTOS
-		//echo $unidadeMinutoAntigo." proxima conexao:".$unidadeMinuto."\n";		
+		//echo $unidadeMinutoAntigo." proxima conexao:".$unidadeMinuto."\n";
 		if(
 			$unidadeMinuto
 			- $unidadeMinutoAntigo
@@ -64,7 +67,7 @@ if ($result = $mysqli -> query($query)) {
 			//	$caminhos.=", ";
 			$qntd_caminhos++;
 			$caminhos.=$caminho;
-			$caminho=", \"".$qntd_caminhos."\":[";
+			$caminho=", \"".$qntd_caminhos." caminho\":[";
 			$qntd_saltos=0;
 		}
 //		if(
@@ -81,7 +84,6 @@ if ($result = $mysqli -> query($query)) {
 			else
 				$salto="";
 			$salto.="{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}";
-	
 
 			$caminho.=$salto;
 			//echo "caminho ".$qntd_caminhos.":".$caminho."\n";
@@ -99,7 +101,7 @@ if ($result = $mysqli -> query($query)) {
 			$caminhos.=$caminho;
 
 			//echo "registrando ultima conexao\n";
-			$caminhos.=", \"last_seen\":[{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}]";
+			$caminhos.=", \""."last_seen"."\":[{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}]";
 		}
 	}
 	$caminhos.="}";
