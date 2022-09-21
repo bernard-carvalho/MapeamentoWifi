@@ -12,6 +12,7 @@
                 echo "}, \n";
             $number_of_entry++;
             echo "{"."\n";
+            $number_of_attributes=0;
         }
 
     }
