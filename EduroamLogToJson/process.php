@@ -1,6 +1,11 @@
 <?php
-    echo "[";
+    $json_string = "[";
+    $directory="../tmp/directory";
+    $command_find_file_names = "ls ".$directory." -ld */ "."| cut -d':' -f2 | cut -d' ' -f2";
+    echo $command_find_file_names."\n";
+
     $file_name = "../tmp/logfile";
+    
     $vetor_entradas=array();
     $vetor_comandos=array();
     $cat_file = "cat ".$file_name;
@@ -12,10 +17,9 @@
         //condicional para verificar se a linha do arquivo não esta vazia, representando um atributo ou a criação de uma nova entrada
             if($conteudo_arquivo[$linha_arquivo][0]!="\t"){
                 if($number_of_entry!=0)
-                    echo "},\n";
-                //echo 
+                    $json_string.= "},\n";
                 $number_of_entry++;
-                echo "{"."\n";
+                $json_string.="{"."\n";
                 $number_of_attributes=0;
                 do{
                     if($linha_arquivo>=count($conteudo_arquivo))
@@ -27,18 +31,18 @@
                     {
                         $attribute_name = "\"date\"";
                         $attribute_value = "\"".$conteudo_arquivo[$linha_arquivo]."\"";
-                        echo $attribute_name.":".$attribute_value."\n";
+                        $json_string.= $attribute_name.":".$attribute_value."\n";
                     }
                     else
                     {
-                        echo ",";
+                        $json_string.= ",";
                         $attribute_name = "\"".trim(explode("=",substr($attribute,1))[0])."\"";
                         $attribute_value = "";
                         if(strlen(explode("\"",trim(explode("=",substr($attribute,1))[1]))[0])!=0)
                             $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[0]."\"";
                         else
                             $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[1]."\"";
-                        echo $attribute_name.":".$attribute_value."\n";
+                        $json_string.=$attribute_name.":".$attribute_value."\n";
                     }
                     $number_of_attributes++;
                     
@@ -53,5 +57,9 @@
             }
         }//if(strlen($conteudo_arquivo[$linha_arquivo])==0)
     }//for($linha_arquivo=0;$linha_arquivo<count($result);$linha_arquivo++)
-    echo "}]";
+    $json_string.= "}";
+    $json_string.= "]";
+
+
+    //echo $json_string;
 ?>
