@@ -14,7 +14,13 @@
             echo "{"."\n";
             $number_of_attributes=0;
             do{
-
+                if($linha_arquivo>=count($conteudo_arquivo))
+                    break;
+                if(strlen($conteudo_arquivo[$linha_arquivo])==0)
+                    break;
+                
+                if($linha_arquivo+1>=count($conteudo_arquivo))
+                    break; 
             }while(
                 strlen($conteudo_arquivo[$linha_arquivo])>0 &&
                 $conteudo_arquivo[$linha_arquivo][0]=="\t" &&
