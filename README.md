@@ -3,5 +3,4 @@ TESTE Um projeto que tem por finalidade gerar um mapeamento de todas as estaçõ
 
 Dependencias:
 
-lamp-server^
-php-curl
+apt install lamp-server^ php-curl -y
