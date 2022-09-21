@@ -10,6 +10,7 @@
         if($conteudo_arquivo[$linha_arquivo][0]!="\t"){
             if($number_of_entry!=0)
                 echo "}, \n";
+            $number_of_entry++;
         }
 
     }
