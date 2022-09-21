@@ -13,6 +13,13 @@
             $number_of_entry++;
             echo "{"."\n";
             $number_of_attributes=0;
+            do{
+
+            }while(
+                strlen($conteudo_arquivo[$linha_arquivo])>0 &&
+                $conteudo_arquivo[$linha_arquivo][0]=="\t" &&
+                $linha_arquivo < count($conteudo_arquivo)
+            );
         }
 
     }
