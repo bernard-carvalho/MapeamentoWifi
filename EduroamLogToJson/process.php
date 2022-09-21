@@ -11,6 +11,7 @@
             if($number_of_entry!=0)
                 echo "}, \n";
             $number_of_entry++;
+            echo "{"."\n";
         }
 
     }
