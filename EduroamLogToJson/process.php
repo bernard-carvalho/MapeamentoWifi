@@ -18,7 +18,13 @@
                     break;
                 if(strlen($conteudo_arquivo[$linha_arquivo])==0)
                     break;
-                
+                $attribute = $conteudo_arquivo[$linha_arquivo];
+                if($number_of_attributes==0)
+                {
+                    $attribute_name = "\"Date\"";
+                    $attribute_value = "\"".$conteudo_arquivo[$linha_arquivo]."\"";
+                    echo $attribute_name.":".$attribute_value."\n";
+                }
                 if($linha_arquivo+1>=count($conteudo_arquivo))
                     break; 
             }while(
