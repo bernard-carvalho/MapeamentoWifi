@@ -34,6 +34,7 @@
                             $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[1]."\"";
                         echo $attribute_name.":".$attribute_value."\n";
                 }
+                $number_of_attributes++;
                 if($linha_arquivo+1>=count($conteudo_arquivo))
                     break; 
             }while(
