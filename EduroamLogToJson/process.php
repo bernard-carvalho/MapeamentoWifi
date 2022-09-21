@@ -24,6 +24,15 @@
                     $attribute_name = "\"Date\"";
                     $attribute_value = "\"".$conteudo_arquivo[$linha_arquivo]."\"";
                     echo $attribute_name.":".$attribute_value."\n";
+                }else{
+                    echo ",";
+                        $attribute_name = "\"".trim(explode("=",substr($attribute,1))[0])."\"";
+                        $attribute_value = "";
+                        if(strlen(explode("\"",trim(explode("=",substr($attribute,1))[1]))[0])!=0)
+                            $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[0]."\"";
+                        else
+                            $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[1]."\"";
+                        echo $attribute_name.":".$attribute_value."\n";
                 }
                 if($linha_arquivo+1>=count($conteudo_arquivo))
                     break; 
