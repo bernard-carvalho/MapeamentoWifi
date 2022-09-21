@@ -43,7 +43,7 @@
                 $linha_arquivo < count($conteudo_arquivo)
             );
         }
-
     }
+    echo "}";
     echo "]";
 ?>
