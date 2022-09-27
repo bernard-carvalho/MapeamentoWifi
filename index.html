@@ -26,7 +26,7 @@ function send(){
 }
 function draw_tables(obj){
     document.getElementById("res").innerHTML="";
-    for(let i=1 ;i < (Object.keys(obj).length)-1; i++)
+    for(let i=0 ;i < (Object.keys(obj).length); i++)
             draw_table(Object.keys(obj)[i], obj);
 }
 function draw_table(attr_name,obj){
@@ -41,7 +41,7 @@ function draw_table(attr_name,obj){
     let thHead = document.createElement("th");
             trHead.appendChild(thHead);
             thHead.innerHTML=attr_name;
-            thHead.setAttribute("colspan","3");
+            thHead.setAttribute("colspan",Object.keys(obj[attr_name][0]).length);
     let trHead2 = document.createElement("tr");
             table.appendChild(trHead2);
     for(let i=0; i<Object.keys(obj[attr_name][0]).length;i++)
