@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta charset=UTF-8>
+<script>
+function send(){
+  let inputs=document.querySelectorAll("input");
+  let form_action=document.getElementById("form").getAttribute("action");
+  let URI=form_action+"?";
+    URI+= "ip="+inputs[0].value;
+    URI+= "&inicio="+inputs[1].value;
+    URI+= "&fim="+inputs[2].value;
+    URI+= "&intervalo="+inputs[3].value;
+  alert(URI);
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange=function(){
+    if( this.readyState == 4 && this.status==200 ){
+      let obj_str = xhttp.responseText;
+      let obj = JSON.parse(obj_str);
+      console.log("Objeto recebido:\n");
+      console.log(obj);
+      draw_tables(obj);
+    }
+  }
+  xhttp.open("GET",URI,true);
+  xhttp.send();
+}
+function draw_tables(obj){
+    document.getElementById("res").innerHTML="";
+    for(let i=1 ;i < (Object.keys(obj).length)-1; i++)
+            draw_table(Object.keys(obj)[i], obj);
+}
+function draw_table(attr_name,obj){
+    if(Object.keys(obj[attr_name]).length==0)
+            return;
+    let res = document.getElementById("res");
+    let table = document.createElement("table");
+            table.setAttribute("id",attr_name);
+            table.setAttribute("border","1");
+    let trHead = document.createElement("tr");
+            table.appendChild(trHead);
+    let thHead = document.createElement("th");
+            trHead.appendChild(thHead);
+            thHead.innerHTML=attr_name;
+            thHead.setAttribute("colspan","3");
+    let trHead2 = document.createElement("tr");
+            table.appendChild(trHead2);
+    for(let i=0; i<Object.keys(obj[attr_name][0]).length;i++)
+    {
+            let nome_atributo = Object.keys(obj[attr_name][0])[i];
+            let thHead2 = document.createElement("th");
+                    thHead2.innerHTML=nome_atributo;
+            trHead2.appendChild(thHead2);
+    }
+
+    for(let i=0; i<Object.keys(obj[attr_name]).length;i++){
+            let entrada = obj[attr_name][i];
+            let trEntrada = document.createElement("tr");
+
+            for(let j=0; j<Object.keys(entrada).length;j++){
+                    let atributo = Object.keys(entrada)[j];
+                    let tdAtributo = document.createElement("td");
+                            tdAtributo.innerHTML=entrada[atributo];
+                    trEntrada.appendChild(tdAtributo);
+            }
+            table.appendChild(trEntrada);
+    }
+    res.appendChild(table);
+//      console.log(obj[attr_name]);
+}
+</script>
+</head>
+<body>
+<table border=1>
+    <tr>
+            <th>IP</th>
+            <th>DATA_INICIO</th>
+            <th>DATA_FIM</th>
+            <th>Intervalo</th>
+            <th>AÇÕES</th>
+    </tr>
+    <tr>
+            <form action="path.php" method="get" id="form">
+            <td>    <input name="ip" placeholder="Insira o Endereço ip aqui" value="172.16.2.160"></td>
+            <td>    <input name="inicio" type="date" value="2022-09-27">    </td>
+            <td>    <input name="fim" type="date" value="2022-09-28">       </td>
+            <td>    <input name="intervalo" type="number" value=5> </td>
+            <td>    <input type="button" onclick="send()" value="Buscar">   </td>
+            </form>
+    </tr>
+</table>
+<div id="res">
+</div>
+</body>
+</html>
