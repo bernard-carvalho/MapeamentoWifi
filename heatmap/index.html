@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+   .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*
+        height: 95%;
+        width: 95%;
+
+        border-bottom: 1vh solid green;
+        border-top: 1vh solid green;
+        border-left: 1vw solid green;
+        border-right: 1vw solid green;
+        */
+
+    }
+    .image{
+        width:      100vw;
+        height:     100vh;
+        background-image: url(image.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center top;
+    }
+    .debug{
+        border: 1px solid black;
+    }
+    .item{
+        position: fixed;
+        display: block;
+
+
+        font-size: 1vh;
+        align-items: center;    
+        justify-content: center;
+
+    }
+    .item div.signal{
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        opacity: 0.6;
+        position: relative;
+        top: -2vh;
+        width:4vh;
+        left: -2vh;
+        height:4vh;
+        box-shadow: 0px 0px 0px 1vh rgba(255,162,00,0.2);
+        border-radius: 50%;
+        display: inline-block;
+        background-color: rgba(0,162,00,0.4);
+/*        background: radial-gradient(#FF8888, #00FF00);*/
+    }
+    .item div.signal .item_text{
+        opacity: 1;
+        position:relative;
+        font-weight: bold;
+        transform: translateY(+1vh);
+    }
+
+    .item div.signal .item_text{
+        opacity: 1;
+        position:relative;
+        font-weight: bold;
+        transform: translateY(+2vh);
+    }
+    
+    .b1{top:52%;left:35.5%;}
+    .b2{top:52%;left:46.5%;}
+    .b3{top:62.7%;left:39.5%;}
+    .b4{top:62.7%;left:25.5%;}
+    .b5{top:62.7%;left:46.5%;}
+    .b5a{top:62.7%;left:64.4%;}
+    .b6{top:72.4%;left:25.5%;}
+    .b7{top:73.2%;left:46.5%;}
+    .b7a{top:73.2%;left:64.4%;}
+    .b8{top:82.2%;left:25.5%;}
+    .b9{top:82.2%;left:46.5%;}
+    .b9a{top:82.2%;left:64.4%;}
+    .b10{top:92%;left:32%;}
+    .b11{top:92%;left:46.5%;}
+    .b11a{top:92%;left: 64.4%;}
+    .b12{top:52%;left: 64.4%;}
+    .b13{top:91.4%;left:73.4%;}
+    .b14{top:12.5%;left:50.5%;}
+    .b15{top:19.3%;left:50.5%;}
+    .b16{top:25.6%;left:50.5%;}
+    .b17{top:32%;left:50.5%;}
+    .b18{top:81.6%;left:76.0%;}
+    .b19{top:17.6%;left:38.0%;}
+    .b20{top:88%;left:25.5%;}
+    .b21{top:32%;left:27.5%;}
+</style>
+
+<body>
+    <div class="wrapper">
+        <div class="image center" id="campus">
+            <div class="item b1"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b2"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b3"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b4"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b5"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b5a"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b6"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b7"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b7a"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b8"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b9"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b9a"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b10"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b11"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b11a"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b12"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b13"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b14"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b15"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b16"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b17"> 
+                <div class="signal">
+                    <p class="item_text">
+                        ${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b18"> 
+                <div class="signal">
+                    <p class="item_text">
+                        bb${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b19"> 
+                <div class="signal">
+                    <p class="item_text">
+                        aa${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b20"> 
+                <div class="signal">
+                    <p class="item_text">
+                        cc${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+            <div class="item b21"> 
+                <div class="signal">
+                    <p class="item_text">
+                        dd${nome_bloco}<br>${numero_estações}
+                    </p>
+                </div> 
+            </div>
+
+            
+        </div>
+    </div>
+</body>
+<script>
+     window.onload=function(){
+        setInterval(RealizaRequisicaoAJAX,5000);
+        RealizaRequisicaoAJAX();
+    }
+
+    function RealizaRequisicaoAJAX(){    
+        let xhttp = new XMLHttpRequest();  
+        xhttp.onreadystatechange=function(){
+            if(this.readyState == 4 && this.status==200){
+                let obj_str = xhttp.responseText;
+                let obj = JSON.parse(obj_str);
+                draw_aps(obj);
+            }
+        }
+        xhttp.open("GET","/heatmap/heatmap.php",true);
+        xhttp.send();
+    }
+    function draw_aps(obj){
+        let campus = document.getElementById("campus");
+        campus.innerHTML="";
+        for(let i=0; i<Object.keys(obj).length -1;i++){
+            draw_ap(obj, i, obj[Object.keys(obj)[Object.keys(obj).length-1]]);
+        }
+    }  
+    function draw_ap(obj, i, max_i){
+        let campus = document.getElementById("campus");
+
+        let bloco = obj[Object.keys(obj)[i]];
+        let total_de_clientes = max_i.quantidadeTotalClientes;
+        let bloco_shadow_size_em_vh = bloco["qntd"]*100/total_de_clientes;
+
+        console.log("Desenhando Bloco:"+bloco_shadow_size_em_vh+"/"+total_de_clientes);
+
+        let div_bloco = document.createElement("div");
+                div_bloco.setAttribute("class", "item");
+        let coordenadas="top:"+bloco.Y+"%;"+"left:"+bloco.X+"%";
+                div_bloco.setAttribute("style", coordenadas);
+
+        div_bloco.setAttribute("id",bloco.nome_bloco);
+        campus.appendChild(div_bloco);
+
+
+        let div_signal_bloco = document.createElement("div");
+        div_signal_bloco.setAttribute("class", "signal");
+        /*
+                ALTERA  SHADOW AQUI
+        */
+        bloco_shadow_size_em_vh = +bloco_shadow_size_em_vh.toFixed(2);
+        div_signal_bloco.setAttribute("style",
+        "box-shadow: 0px 0px 0px "+bloco_shadow_size_em_vh+"vh rgba(0,162,00,0.4)")
+        div_bloco.appendChild(div_signal_bloco);
+
+        /*
+                ALTERA TEXTO AQUI
+        */
+        let p = document.createElement("p");
+        p.setAttribute("class","item_text");
+        p.innerHTML=bloco.nome_bloco+"<BR>["+bloco.qntd+"]";
+        div_signal_bloco.appendChild(p);
+
+
+
+        console.log(obj[Object.keys(obj)[i]]);
+        console.log(max_i);
+    }
+
+
+</script>
+</html>

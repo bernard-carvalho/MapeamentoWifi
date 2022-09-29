@@ -1,117 +1,98 @@
 <?php
-
-$mysqli = new mysqli("localhost","admin","admin","Monitoramento");
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  exit();
-}
-
-$query="";
-
-$dataInicio=$_GET["inicio"];
-//"2022-09-13 00:00";
-$dataFim=$_GET["fim"];
-//"2022-09-14 00:00";
-$ipPesquisa=$_GET["ip"];
-//"172.16.2.160";
-$intervaloMaximo=intval($_GET["intervalo"]);
-
-$query="select ap_ip, ip_sta, ap_nome, date from (select * from (select * from MAC_STA inner join AP on MAC_STA.mac_ap=AP.ap_mac where date>=\"".$dataInicio."\" and date<=\"".$dataFim."\")aa where ip_sta=\"".$ipPesquisa."\" order by mac_ap, date)bb order by date;";
-
-//echo "Query: \"".$query."\"";
-if ($result = $mysqli -> query($query)) {
-//  echo "Returned rows are: " . $result -> num_rows;
-
-//	echo $result;
-// Free result set
-	$ap_ip_antigo="";
-	$data_antiga="00:00";
-	$caminhos = "{";
-	$qntd_caminhos=0;
-	$caminho="\"queryInfo\":[{";
-	$caminho.="\"sta_ip\":\"".$ipPesquisa."\", ";
-	$caminho.="\"dataInicio\":\"".$dataInicio."\", ";
-	$caminho.="\"dataFim\":\"".$dataFim."\", ";
-	$caminho.="\"IntervaloMaximo\":\"".$intervaloMaximo."\"}";
-	$qntd_saltos=0;
-
-	for($i=0; $i<$result->num_rows;$i++){
-		$salto="";
-		$row = $result->fetch_array();
-	//	var_dump($row);
-	//	$ap_nome=$row["ap_nome"];
-		$data=$row["date"];
-		$ap_ip=$row["ap_ip"];
-		$ap_nome=$row["ap_nome"];
-
-
-		$data_hora_minuto=substr($data,11,5);
-
-		//echo "detectado salto de ".$data_antiga." para ".$data_hora_minuto."\n";
-		$unidadeMinuto=intval(substr($data_hora_minuto,3,2))+
-		intval(substr($data_hora_minuto,0,2))*60;
-		$unidadeMinutoAntigo=intval(substr($data_antiga,3,2))+
-		intval(substr($data_antiga,0,2))*60;
-		//SE O INTERVALO FOR SUPERIOR A X MINUTOS
-		//echo $unidadeMinutoAntigo." proxima conexao:".$unidadeMinuto."\n";
-		if(
-			$unidadeMinuto
-			- $unidadeMinutoAntigo
-			>=$intervaloMaximo || $i==$result->num_rows
-		)
-		{
-			//echo "[ ## CAMINHO ] detectado novo caminho"."\n";
-			//	echo $data_antiga."-".$data_hora_minuto."\n";
-			$caminho.="]";
-			//if($qntd_caminhos>0)
-			//	$caminhos.=", ";
-			$qntd_caminhos++;
-			$caminhos.=$caminho;
-			$caminho=", \"".$qntd_caminhos." caminho\":[";
-			$qntd_saltos=0;
-		}
-//		if(
-//			!((substr($data_minuto,0,2)==substr($data_antiga,0,2))&&
-//			(substr($data_minuto,3,1)==substr($data_antiga,3,1)))
-//		)
-//			echo "detectado um salto na data".$data_antiga." para ".$data_minuto."\n";
-		//echo $ap_ip_antigo."::".$ap_ip."\n";
-
-		if(	$ap_ip_antigo	!=	$ap_ip	){
-			//echo "[ # SALTO ] registrando novo salto\n";
-			if($qntd_saltos>0)
-				$salto=", ";
-			else
-				$salto="";
-			$salto.="{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}";
-
-			$caminho.=$salto;
-			//echo "caminho ".$qntd_caminhos.":".$caminho."\n";
-
-			$qntd_saltos++;
-			$ap_ip_antigo=$ap_ip;
-		}
-
-		$data_antiga=$data_hora_minuto;
-
-		if($i==($result->num_rows-1))
-		{
-			//echo "registrando ultimo caminho\n";
-			$caminho.="]";
-			$caminhos.=$caminho;
-
-			//echo "registrando ultima conexao\n";
-			$caminhos.=", \""."last_seen"."\":[{\"ap_ip\":\"".$ap_ip."\", \"data\":\"".$data."\", \"ap_nome\":\"".$ap_nome."\"}]";
-		}
-	}
-	$caminhos.="}";
-
-	echo $caminhos."\n";
-
-  $result -> free_result();
-}
-
-$mysqli -> close();
-
-
+        $conexao_mysql = new mysqli("localhost","admin","admin","Monitoramento");
+        if(mysqli_connect_errno()){
+                echo "Failed to connect to MySQL ".mysqli_connect_error();
+                exit();
+        }
+        $busca_data_inicio="2022-09-26 00:00";
+        $busca_data_fim="2022-09-28 00:00";
+        $busca_ip="172.16.2.160";
+        $busca_intervalo=intval("5");
+        $ap_atual="nenhum";
+        $quantidade_caminhos=0;
+        $caminhos=array();
+        $caminho=array();
+        $data_atual="0000-00-00 00:00";
+        $query =" SELECT * FROM MAC_STA INNER JOIN AP ON MAC_STA.mac_ap=AP.ap_mac WHERE ".
+                "MAC_STA.date>=\"".$busca_data_inicio."\" ".
+                " AND ".
+                "MAC_STA.date<=\"".$busca_data_fim."\" ".
+                " AND ".
+                "MAC_STA.ip_sta=\"".$busca_ip."\" ".
+                "ORDER BY date";
+        if(!($result = $conexao_mysql -> query($query))){
+                echo "Failed to query MySQL";
+                exit();
+        }
+        for($i=0; $i<$result->num_rows;$i++){//itera entre cada linha da resposta
+                $row = $result->fetch_array();
+                //var_dump($row);
+                if(
+                        $row["ap_nome"]!=$ap_atual
+                ){
+                        //################
+                        //## NOVO SALTO ##
+                        //################
+                        //atualiza as datas
+                                $data_antiga=$data_atual;
+                                $data_atual=$row["date"];
+                        //sumariza as datas em minutos
+                                $data_antiga_ano=intval(substr($data_antiga,1,4));
+                                $data_antiga_mes=intval(substr($data_antiga,6,2));
+                                $data_antiga_dia=intval(substr($data_antiga,9,2));
+                                $data_antiga_horas=intval(substr($data_antiga,12,2));
+                                $data_antiga_minutos=intval(substr($data_antiga,14,2));
+                                $data_antiga_em_minutos = 
+                                        $data_antiga_ano*60*24*30*12+
+                                        $data_antiga_mes*60*24*30+
+                                        $data_antiga_dia*60*24+
+                                        $data_antiga_horas*60+
+                                        $data_antiga_minutos;
+                                $data_atual_ano=intval(substr($data_atual,1,4));
+                                $data_atual_mes=intval(substr($data_atual,6,2));
+                                $data_atual_dia=intval(substr($data_atual,9,2));
+                                $data_atual_horas=intval(substr($data_atual,12,2));
+                                $data_atual_minutos=intval(substr($data_atual,14,2));
+                                $data_atual_em_minutos=
+                                        $data_atual_ano*60*24*30*12+
+                                        $data_atual_mes*60*24*30+
+                                        $data_atual_dia*60*24+
+                                        $data_atual_horas*60+
+                                        $data_atual_minutos;
+                        if($data_atual_em_minutos-$data_antiga_em_minutos >= $busca_intervalo || $i == $result->num_rows-1 )
+                        {
+                                //####################
+                                //##  NOVO CAMINHO  ##
+                                //####################
+                                //echo "Identificado novo caminho ".$quantidade_caminhos++." as ".$row["date"]."\n";
+                                        //#################################################
+                                        //##  todo: INSERE SAIDA NO CAMINHO ANTERIOR     ## 
+                                        //#################################################
+                                        $caminho[] =    json_decode("{".
+                                                "\"ip_sta\":"."\"".$row["ip_sta"]."\"".",".
+                                                "\"ap_mac\":"."\""."-"."\"".",".
+                                                "\"ap_nome\":"."\""."-"."\"".",".
+                                                "\"date\":"."\"".$data_antiga."\"".
+                                                "}");
+                                if($i!=0)
+                                        $caminhos[]=$caminho;
+                                $caminho = array();
+                        }
+                        //echo "detectado salto de ".$ap_atual." para ".$row["ap_nome"]." ás ".$row["date"]."\n";
+                        $caminho[] =    json_decode("{".
+                                        "\"ip_sta\":"."\"".$row["ip_sta"]."\"".",".
+                                        "\"ap_mac\":"."\"".$row["ap_mac"]."\"".",".
+                                        "\"ap_nome\":"."\"".$row["ap_nome"]."\"".",".
+                                        "\"date\":"."\"".$row["date"]."\"".
+                                        "}"); 
+                }
+                else{
+                        //caso seja o mesmo AP
+                        //$data_antiga=$data_atual;
+                        //$data_atual=$row["date"];
+                }
+                $ap_atual=$row["ap_nome"];
+        }
+        $caminhos[]=$caminho;
+        echo json_encode($caminhos);
 ?>
