@@ -16,7 +16,7 @@
         //echo $row["id"]."\n";
         $resultado = "{".
                             "\""."id_bloco"."\"".      ":"   ."\"".$row["id"]."\""    . ",".
-                            "\""."nome_bloco"."\"".      ":"   ."\"".$row["bloco"]."\""    . ",".
+                            "\""."nome_bloco"."\"".      ":"   ."\"".$row["nome_bloco"]."\""    . ",".
                             "\""."qntd"."\"".      ":"   ."\"".$row["quantidade_clientes"]."\"".",".
                             "\""."X"."\"".      ":"   ."\"".$row["posX"]."\"".",".
                             "\""."Y"."\"".      ":"   ."\"".$row["posY"]."\"".
@@ -30,3 +30,4 @@
         $resultados[] = json_decode($last_element);
         echo json_encode($resultados);
 ?>
+
