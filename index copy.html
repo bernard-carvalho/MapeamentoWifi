@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="leaflet/leaflet.css"/>
+  <script src="leaflet/leaflet.js"></script>
+  <style>
+    *{margin: 0; padding: 0;}
+    #map{height:100vh;}
+  </style>
+
+  <title>Exemplo Leaflet</title>
+</head>
+<body>
+  <div id="map">
+  </div>
+
+</body>
+
+</html>
+<script>
+  var circles=[];
+  let latitude=-10.1993;
+  let longitude=-48.3115;
+  let zoom=18;
+  var map = L.map('map').setView([latitude,longitude],zoom);
+ document.addEventListener("DOMContentLoaded",()=>{
+
+  setInterval(RealizaRequisicaoAJAX, 1000);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+ });
+
+ function showMap(){
+  console.log(map);
+        return map;
+ }
+ function showCircles(){
+  console.log(circles);
+        return circles;
+ }
+ function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+}
+
+function RealizaRequisicaoAJAX(){
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange=function(){
+        if(this.readyState == 4 && this.status==200){
+            let obj_str = xhttp.responseText;
+                localStorage.objeto=obj_str;
+            let obj = JSON.parse(obj_str);
+            console.log(obj);
+            for(let i=0; i<obj.length;i++){
+                updateCircle(obj[i].lat,obj[i].lng,obj[i].qntd);
+            }
+            for(let i=0; i<circles.length;i++){
+              let found=false;
+              for(let j=0; j<obj.length;j++){
+                if(
+                  obj[j].lat == circles[i]._latlng.lat &&
+                  obj[j].lng == circles[i]._latlng.lng
+                )
+                {
+                  found=true;break;
+                }
+              }
+              if(!found)
+                circles[i].setRadius(0);
+            }
+        }
+    }
+    xhttp.open("GET","/heatmap/detalhado/v2/heatmap.php",true);
+    xhttp.send();
+}
+
+var popup = L.popup();
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+map.on('click', onMapClick);
+
+ function addCircle(lat,long,size){
+  var circle = L.circle([lat,long],{
+    color: 'red',
+    fillColor: '#0d3',
+    fillOpacity: 0.55,
+    radius: size,
+    weight: 0.5
+  }).addTo(map);
+        let this_circle=circle;
+        circle.bindPopup("<div>"+get_circle_name(lat,long)+"</div>Usuarios: "+get_circle_sta(lat,long));
+        circle.on('click',(e)=>{e.target.getPopup().setContent("<div>"+get_circle_name(lat,long)+"</div>Usuarios: "+get_circle_sta(lat,long))})
+  circles.push(circle);
+  return circle;
+ }
+
+function get_circle_name(lat,long){
+         let obj = JSON.parse(localStorage.objeto);
+        for(i=0;i<obj.length;i++){
+                if(obj[i].lat==lat && obj[i].lng==long)
+                        return obj[i].nome_bloco;
+        }
+}
+
+function get_circle_sta(lat, long){
+        let obj = JSON.parse(localStorage.objeto);
+        for(i=0;i<obj.length;i++){
+                if(obj[i].lat==lat && obj[i].lng==long)
+                        return obj[i].qntd;
+        }
+}
+function updateCircle(lat, lng, size){
+        if(!lat || !lng)
+                return;
+  found = false;
+  for(let i=0; i<circles.length;i++){
+      if( circles[i]._latlng.lat != lat ||
+          circles[i]._latlng.lng != lng
+        )
+        continue;
+
+      found = true;
+      circles[i].setRadius(size);
+      return circles[i];
+  }
+
+  if(!found){
+    return addCircle(lat,lng,size);
+  }
+ }
+
+</script>
